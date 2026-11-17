@@ -1,0 +1,30 @@
+{
+	admin off
+	auto_https off
+	persist_config off
+	servers {
+		trusted_proxies static private_ranges 100.64.0.0/10
+	}
+}
+
+:{$PORT} {
+	# Railway health check: answers 200 only when the broker itself is up.
+	handle /healthz {
+		rewrite * /api/v1/version
+		reverse_proxy 127.0.0.1:9884
+	}
+
+	# MQTT over WebSocket: wss://YOUR-DOMAIN/mqtt (any path works).
+	@websocket {
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+	handle @websocket {
+		reverse_proxy 127.0.0.1:9001
+	}
+
+	# Everything else is the dashboard, behind the broker's own login.
+	handle {
+		reverse_proxy 127.0.0.1:9883
+	}
+}
