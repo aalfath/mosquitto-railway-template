@@ -27,6 +27,7 @@ Anonymous clients are refused on every listener.
 | `MQTT_URL` | reference | `mqtt://user:password@mosquitto.railway.internal:1883`, for other services in the same project. |
 | `MQTT_PUBLIC_URL` | reference | `mqtt://user:password@TCP-PROXY-HOST:PORT`, for clients outside Railway. |
 | `PORT` | `8080` | Port Caddy listens on for the Railway domain. |
+| `RAILWAY_DEPLOYMENT_DRAINING_SECONDS` | `15` | Time the broker gets on redeploy to save its data before the old container stops. |
 
 Optional, not in the template (add it to the service if you need it):
 
